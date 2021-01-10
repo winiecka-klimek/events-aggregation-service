@@ -39,7 +39,7 @@ public class RegisterController {
 //        return "registeredUserThankyouPage";
 //    }
 
-    @PostMapping
+    @PostMapping("/register")
     public String submitRegisterForm(@ModelAttribute @Valid NewUserForm newUserForm,
                                      BindingResult bindingResult) {
 
@@ -49,6 +49,9 @@ public class RegisterController {
         if(bindingResult.hasErrors()) {
             return "registerForm";
         }
-        return "registeredUserThankyouPage";
+
+        registerService.registerUser(newUserForm);
+
+        return "registeredUserThankYouPage";
     }
 }
