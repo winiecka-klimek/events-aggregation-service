@@ -1,7 +1,10 @@
 package Javaldz26.event_aggregation_service.services;
 
 import Javaldz26.event_aggregation_service.dao.UserRepository;
+import Javaldz26.event_aggregation_service.dtos.UserSessionDto;
 import Javaldz26.event_aggregation_service.entities.User;
+import Javaldz26.event_aggregation_service.exceptions.InvalidCredentialsException;
+import Javaldz26.event_aggregation_service.exceptions.UserDoesntExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ public class LoginService implements InitializingBean {
     private UUID uuid;
 
     private boolean logged;
+    private UserSessionDto userSessionDto;
 
     @Autowired
     public LoginService(UserRepository userRepository) {
@@ -49,6 +53,10 @@ public class LoginService implements InitializingBean {
     public void logout() {
         this.logged = false;
         this.userSessionDto = null;
+    }
+
+    public UserSessionDto getUserSessionDto() {
+        return userSessionDto;
     }
 
     @Override

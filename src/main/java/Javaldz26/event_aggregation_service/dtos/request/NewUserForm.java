@@ -6,18 +6,18 @@ import javax.validation.constraints.Size;
 
 public class NewUserForm {
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Email can not be empty")
+    @NotBlank(message = "Email can not be empty")
     @Size(max = 100)
     private String email;
 
-    @NotNull
+    @NotNull(message = "Nickname can not be empty")
     @NotBlank(message = "Nickname can not be empty")
     private String nickname;
 
     @Size(min = 8, max = 30)
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Password can not be empty")
+    @NotBlank(message = "Password can not be empty")
     private String password;
 
     public String getEmail() {
