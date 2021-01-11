@@ -6,7 +6,7 @@
     <th:block th:replace="navbar :: headScripts"></th:block>
 </head>
 <body>
-<th:block th:fragment="navBar">
+<div th:replace="navbar :: navBar"></div>
 <!--<form th:action="@{/login-submit-data}" method="post">-->
 <!--    <input type="text" name="username" placeholder="Enter your e-mail...">-->
 <!--    <br>-->

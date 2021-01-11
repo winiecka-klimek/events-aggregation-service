@@ -6,7 +6,7 @@
     <th:block th:replace="navbar :: headScripts"></th:block>
 </head>
 <body>
-<th:block th:fragment="navBar">
+<div th:replace="navbar :: navBar"></div>
 <p class="h3">Can not login</p>
 <p style="color: gray" class="h2">Invalid username and/or password</p>
 </body>
