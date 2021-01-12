@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class LoginController {
 
+
+    private final LoginService loginService;
+
+    @Autowired
     public LoginController(LoginService loginService) {
         this.loginService = loginService;
     }
-
-    @Autowired
-    private final LoginService loginService;
 
     @GetMapping("/login")
     public String showLoginForm(){
@@ -35,6 +36,12 @@ public class LoginController {
             return "redirect:/login";
         }
 
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout-user")
+    public String logoutUser() {
+        loginService.logout();
         return "redirect:/";
     }
 }

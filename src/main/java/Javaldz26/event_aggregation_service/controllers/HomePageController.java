@@ -20,8 +20,10 @@ public class HomePageController {
     @GetMapping("/")
     public String showHomePage(Model model) {
 
-//        model.addAttribute("userInfo",  loginService.getUserSessionDto());
-//        model.addAttribute("loggedAs", userContextService.getCurrentlyLoggedUsername());
+        model.addAttribute("userLogged", loginService.isLogged());
+        model.addAttribute("userInfo", loginService.getUserSessionDto());
+        model.addAttribute("loggedAs", userContextService.getCurrentlyLoggedUserEmail());
+
 
         return "homePage";
     }
