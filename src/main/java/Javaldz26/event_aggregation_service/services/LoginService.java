@@ -32,19 +32,19 @@ public class LoginService implements InitializingBean {
         this.logged = false;
     }
 
-    public void loginUser(String email, String password) {
-        log.info("LoginService loginUser: {} / {}", email, uuid.toString());
-
-        final User user = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new UserDoesntExistException(email));
-
-        if(!user.getPassword().equals(password)) {
-            throw new InvalidCredentialsException("invalid password");
-        }
-
-        this.userSessionDto = new UserSessionDto(user.getEmail());
-        this.logged = true;
-    }
+//    public void loginUser(String email, String password) {
+//        log.info("LoginService loginUser: {} / {}", email, uuid.toString());
+//
+//        final User user = userRepository.findUserByEmail(email)
+//                .orElseThrow(() -> new UserDoesntExistException(email));
+//
+//        if(!user.getPassword().equals(password)) {
+//            throw new InvalidCredentialsException("invalid password");
+//        }
+//
+//        this.userSessionDto = new UserSessionDto(user.getEmail());
+//        this.logged = true;
+//    }
 
     public boolean isLogged() {
         return logged;
