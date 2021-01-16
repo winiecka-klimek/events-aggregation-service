@@ -21,14 +21,14 @@ public class Event {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User owner;
 
-    public User getUser() {
-        return user;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public Long getId() {

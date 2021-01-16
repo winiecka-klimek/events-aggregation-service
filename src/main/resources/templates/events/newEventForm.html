@@ -5,7 +5,7 @@
     <title>Eventus - add new  event</title>
 </head>
 <body>
-<div th:replace="navbar :: navBar"></div>
+<div th:replace="fragments :: navBar"></div>
 <form th:action="@{/events/add}" th:object="${newEventForm}" method="post">
     Title: <input type="text" th:field="*{eventTitle}" placeholder="Enter event title...">
     <span th:errors="*{eventTitle}"></span>

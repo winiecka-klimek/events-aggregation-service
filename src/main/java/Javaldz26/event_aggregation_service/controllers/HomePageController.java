@@ -23,11 +23,11 @@ public class HomePageController {
     @GetMapping("/")
     public String showHomePage(Model model) {
 
-        model.addAttribute("userLogged", loginService.isLogged());
-        model.addAttribute("userInfo", loginService.getUserSessionDto());
+//        model.addAttribute("userLogged", loginService.isLogged());
+//        model.addAttribute("userInfo", loginService.getUserSessionDto());
         model.addAttribute("loggedAs", userContextService.getCurrentlyLoggedUserEmail());
 
-        model.addAttribute("events", eventService.getAllEventsSortedByNearest())
+        model.addAttribute("events", eventService.getAllEventsSortedByClosest());
 
         return "homePage";
     }

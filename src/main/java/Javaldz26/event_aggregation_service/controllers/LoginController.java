@@ -25,19 +25,19 @@ public class LoginController {
         return "loginForm";
     }
 
-    @PostMapping("/login-submit-data")
-    public String submitLoginForm(@RequestParam String email,
-                                  @RequestParam String password) {
-
-        try{
-            loginService.loginUser(email, password);
-        } catch (Exception e) {
-            log.warn("Could not log user in: {}", e.getMessage(), e);
-            return "redirect:/login";
-        }
-
-        return "redirect:/";
-    }
+//    @PostMapping("/login-submit-data")
+//    public String submitLoginForm(@RequestParam String email,
+//                                  @RequestParam String password) {
+//
+//        try{
+//            loginService.loginUser(email, password);
+//        } catch (Exception e) {
+//            log.warn("Could not log user in: {}", e.getMessage(), e);
+//            return "redirect:/login";
+//        }
+//
+//        return "redirect:/";
+//    }
 
     @GetMapping("/logout-user")
     public String logoutUser() {

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Eventus - register page</title>
-    <th:block th:replace="navbar :: headScripts"></th:block>
+    <th:block th:replace="fragments :: headScripts"></th:block>
 
 </head>
 <body>
-<div th:replace="navbar :: navBar"></div>
+<div th:replace="fragments :: navBar"></div>
 <h1>Register page</h1>
 <form th:action="@{/register}" method="post">
     <div class="mb-3">

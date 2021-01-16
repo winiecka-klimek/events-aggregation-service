@@ -16,7 +16,7 @@ public class EventInfoDto {
 
     private LocalDateTime endDate;
 
-    private User user;
+    private User owner;
 
     public EventInfoDto(Long id, String eventTitle, String eventDescription, LocalDateTime startDate, LocalDateTime endDate, User user) {
         this.id = id;
@@ -24,7 +24,7 @@ public class EventInfoDto {
         this.eventDescription = eventDescription;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.user = user;
+        this.owner = user;
     }
 
     public Long getId() {
@@ -47,7 +47,7 @@ public class EventInfoDto {
         return endDate;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwner() {
+        return owner;
     }
 }

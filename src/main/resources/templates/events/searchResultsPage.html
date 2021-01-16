@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Eventus - search results</title>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" role="button" th:href="@{/}">Eventus</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div th:if="${userLogged && userInfo != null}">
+            <ul>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/events}">Add new event</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">Logged as <span th:text="${loggedAs.email}"></span> </a>
+                </li>
+            </ul>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" role="button" th:href="@{/login}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div th:unless="${userLogged && userInfo != null}" class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" role="button" th:href="@{/login}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" role="button" th:href="@{/register}">Register</a>
+                </li>
+                <!--                <li class="nav-item">-->
+                <!--                    <a class="nav-link" href="#">Link</a>-->
+                <!--                </li>-->
+                <!--                <li class="nav-item dropdown">-->
+                <!--                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+                <!--                        Login/Register-->
+                <!--                    </a>-->
+                <!--                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+                <!--                        <li><a class="dropdown-item" th:href="@{/login}">Login</a></li>-->
+                <!--                        <li><hr class="dropdown-divider"></li>-->
+                <!--                        <li><a class="dropdown-item" th:href="@{/register}">Register</a></li>-->
+                <!--                    </ul>-->
+                <!--                </li>-->
+            </ul>
+            <form class="d-flex" th:action="@{/events/search}" method="get">
+                <input class="form-control me-2" type="search" th:text="${searchFraze}"placeholder=searchFraze aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<h1>Your search results:</h1>
+
+<div th:each="event : ${events}">
+    <h2><a th:href="@{/event/{eventId}(eventId=${event.id})}" th:text="${event.eventTitle}">Event title</a></h2>
+    <div th:text="${#temporals.format(event.startDate, 'yyyy-MM-dd HH:mm')}"></div>
+    <div th:text="${#temporals.format(event.endDate, 'yyyy-MM-dd HH:mm')}"></div>
+    <p th:text="${#strings.abbreviate(event.eventDescription, 50)}"></p>
+</div>
+</body>
+</html>
