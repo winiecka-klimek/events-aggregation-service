@@ -10,13 +10,14 @@
 <div th:replace="navbar :: navBar"></div>
 
 <h1>Welcome to event service!</h1>
-<div>
-<!--    <p>Menu: </p>-->
-<!--    <ul>-->
-<!--        <li><a th:href="@{/login}">Login</a></li>-->
-<!--        <li><a th:href="@{/register}">Register</a></li>-->
-<!--    </ul>-->
-</div>
 
+<h1>Ongoing and upcoming events:</h1>
+
+<div th:each="event : ${events}">
+    <h2><a th:href="@{/event/{eventId}(eventId=${event.id})}" th:text="${event.eventTitle}">Event title</a></h2>
+    <div th:text="${#temporals.format(event.startDate, 'yyyy-MM-dd HH:mm')}"></div>
+    <div th:text="${#temporals.format(event.endDate, 'yyyy-MM-dd HH:mm')}"></div>
+    <p th:text="${#strings.abbreviate(event.eventDescription, 50)}"></p>
+</div>
 </body>
 </html>

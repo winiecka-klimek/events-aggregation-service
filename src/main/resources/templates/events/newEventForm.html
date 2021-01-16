@@ -10,8 +10,12 @@
     Title: <input type="text" th:field="*{eventTitle}" placeholder="Enter event title...">
     <span th:errors="*{eventTitle}"></span>
     <br>
-    Content: <textarea th:field="*{eventBody}" rows="10" cols="100"></textarea>
-    <span th:errors="*{eventBody}"></span>
+    Start date:
+    <br>
+    End date:
+    <br>
+    Description: <textarea th:field="*{eventDescription}" rows="10" cols="100"></textarea>
+    <span th:errors="*{eventDescription}"></span>
     <br>
     <input type="submit" value="Add new post">
 </body>

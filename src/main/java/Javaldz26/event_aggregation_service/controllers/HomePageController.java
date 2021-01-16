@@ -1,5 +1,6 @@
 package Javaldz26.event_aggregation_service.controllers;
 
+import Javaldz26.event_aggregation_service.services.EventService;
 import Javaldz26.event_aggregation_service.services.LoginService;
 import Javaldz26.event_aggregation_service.services.UserContextService;
 import org.springframework.stereotype.Controller;
@@ -11,10 +12,12 @@ public class HomePageController {
 
     private final LoginService loginService;
     private final UserContextService userContextService;
+    private final EventService eventService;
 
-    public HomePageController(LoginService loginService, UserContextService userContextService) {
+    public HomePageController(LoginService loginService, UserContextService userContextService, EventService eventService) {
         this.loginService = loginService;
         this.userContextService = userContextService;
+        this.eventService = eventService;
     }
 
     @GetMapping("/")
@@ -24,6 +27,7 @@ public class HomePageController {
         model.addAttribute("userInfo", loginService.getUserSessionDto());
         model.addAttribute("loggedAs", userContextService.getCurrentlyLoggedUserEmail());
 
+        model.addAttribute("events", eventService.getAllEventsSortedByNearest())
 
         return "homePage";
     }
