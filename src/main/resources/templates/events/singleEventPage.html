@@ -15,6 +15,8 @@
 <h3>Sign up for this event</h3>
 <div th:if="${loggedAs != null}">
     <form th:action="@{/events/{eventId}/sign-up-for-event}" th:object="${newAttendeeForm}" method="post">
+        Nick: <input type="text" th:field="*{attendeeNickname}" placeholder="Enter your nickname">
+        <span th:errors="*{attendeeEmail}"></span>
         Email: <input type="text" th:field="*{attendeeEmail}" placeholder="Enter your email">
         <span th:errors="*{attendeeEmail}"></span>
         <br>

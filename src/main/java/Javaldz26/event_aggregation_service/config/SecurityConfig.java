@@ -22,7 +22,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                    .antMatchers("/events/add").authenticated()
+                    .antMatchers("/events/add").hasRole("ROLE_REGULAR_USER")
+                    .antMatchers("/events/*/comment/add").hasRole("ROLE_REGULAR_USER")
 //                    .antMatchers("/events/add").hasAuthority("ROLE_REGULAR_USER")
                     .anyRequest().permitAll()
                 .and()
