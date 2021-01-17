@@ -1,5 +1,6 @@
 package Javaldz26.event_aggregation_service.controllers.error;
 
+import Javaldz26.event_aggregation_service.exceptions.EventNotFoundException;
 import Javaldz26.event_aggregation_service.exceptions.InvalidCredentialsException;
 import Javaldz26.event_aggregation_service.exceptions.UserDoesntExistException;
 import Javaldz26.event_aggregation_service.exceptions.UserWithSuchEmailExistsException;
@@ -44,5 +45,11 @@ public class GlobalErrorHandler {
         return "userAlreadyRegisteredPage";
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(EventNotFoundException.class)
+    public String handle(EventNotFoundException e) {
+        log.warn("Couldn't find event with id: {}", e.getEventId());
+        return "events/noEventFound";
+    }
 
 }
