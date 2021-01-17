@@ -3,6 +3,7 @@ package Javaldz26.event_aggregation_service.controllers;
 import Javaldz26.event_aggregation_service.dtos.EventCommentDto;
 import Javaldz26.event_aggregation_service.dtos.EventInfoDto;
 import Javaldz26.event_aggregation_service.dtos.EventWithCommentsDto;
+import Javaldz26.event_aggregation_service.dtos.request.NewAttendeeForm;
 import Javaldz26.event_aggregation_service.dtos.request.NewCommentForm;
 import Javaldz26.event_aggregation_service.dtos.request.NewEventForm;
 import Javaldz26.event_aggregation_service.services.EventService;
@@ -97,6 +98,13 @@ public class EventController {
         eventService.addNewComment(eventId, newCommentForm);
 
         return "redirect:/events/" + eventId;
+    }
+
+    @PostMapping("/events/{eventId}/sign-up-for-event")
+    public String submitForEventForm(@PathVariable Long eventId,
+                                     @ModelAttribute @Valid NewAttendeeForm newAttendeeForm,
+                                     BindingResult bindingResult, Model model) {
+
     }
 
 }
