@@ -27,7 +27,7 @@ public class HomePageController {
 //        model.addAttribute("userInfo", loginService.getUserSessionDto());
         model.addAttribute("loggedAs", userContextService.getCurrentlyLoggedUserEmail());
 
-        model.addAttribute("events", eventService.getAllEventsSortedByClosest());
+        model.addAttribute("events", eventService.getCurrentAndFutureEvents());
 
         return "homePage";
     }

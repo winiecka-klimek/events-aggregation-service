@@ -11,7 +11,7 @@
 
 <h1>Welcome to event service!</h1>
 
-<h1>Ongoing and upcoming events:</h1>
+<h2>Ongoing and upcoming events:</h2>
 
 <div th:each="event : ${events}">
     <h2><a th:href="@{/event/{eventId}(eventId=${event.id})}" th:text="${event.eventTitle}">Event title</a></h2>

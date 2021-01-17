@@ -11,5 +11,22 @@
 <p style="color: gray">Start date: <span th:text="${#temporals.format(event.startDate, 'yyyy-MM-dd HH:mm')}"></span></p>
 <p style="color: gray">End date: <span th:text="${#temporals.format(event.endDate, 'yyyy-MM-dd HH:mm')}"></span></p>
 <p><span th:text="${event.eventDescription}"></span></p>
+
+<div th:if="${loggedAs != null}">
+<form th:action="@{/events/{eventId}/comment/add}" th:object="${newCommentForm}" method="post">
+    Nickname: <input type="text" th:field="*{commentatorNickname}" placeholder="Enter nickname...">
+    <span th:errors="*{commentatorNickname}"></span>
+    <br>
+    Your comment: <input type="text" th:field="*{commentText}" placeholder="Enter comment...">
+    <span th:errors="*{commentText}"></span>
+    <br>
+    <input type="submit" value="Add comment">
+</form>
+</div>
+
+<div th:each="eventComment : ${eventComments}">
+    <div><span th:text="${eventComment.commentatorNickname}">Nick</span> (<span th:text="${#temporals.format(eventComment.commentAdded, 'yyyy-MM-dd HH:mm')}"></span>)</div>
+    <div th:text="${eventComment.commentText}">Comment text...</div>
+</div>
 </body>
 </html>

@@ -1,18 +1,20 @@
 package Javaldz26.event_aggregation_service.controllers;
 
+import Javaldz26.event_aggregation_service.dtos.EventCommentDto;
 import Javaldz26.event_aggregation_service.dtos.EventInfoDto;
+import Javaldz26.event_aggregation_service.dtos.EventWithCommentsDto;
+import Javaldz26.event_aggregation_service.dtos.request.NewCommentForm;
 import Javaldz26.event_aggregation_service.dtos.request.NewEventForm;
 import Javaldz26.event_aggregation_service.services.EventService;
+import Javaldz26.event_aggregation_service.services.UserContextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -20,9 +22,11 @@ import java.util.Optional;
 public class EventController {
 
     private final EventService eventService;
+    private final UserContextService userContextService;
 
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, UserContextService userContextService) {
         this.eventService = eventService;
+        this.userContextService = userContextService;
     }
 
     @GetMapping("events/add")
@@ -33,13 +37,15 @@ public class EventController {
 
     @PostMapping("/events/add")
     public String handleNewEventForm(@ModelAttribute @Valid NewEventForm newEventForm,
-                                     BindingResult bindingResult) {
+                                     BindingResult bindingResult, Model  model) {
         log.info("New EVENT: {}", newEventForm);
         log.info("New EVENT ERRORS: {}", bindingResult.getAllErrors());
 
         if (bindingResult.hasErrors()) {
             return "events/newEventForm";
         }
+
+        model.addAttribute("loggedAs", userContextService.getCurrentlyLoggedUserEmail());
 
         eventService.saveNewEvent(newEventForm);
 
@@ -59,8 +65,8 @@ public class EventController {
     @GetMapping("/events/{eventId}")
     public String showSinglePostPage(@PathVariable Long eventId, Model model) {
 
-        final Optional<EventInfoDto> eventInfoDtoOptional = eventService.getSingleEventInfo(eventId);
-//        final Optional<PostInfoDto> postInfoDtoOptional = postService.getSinglePostInfoWithComments(postId);
+        final Optional<EventWithCommentsDto> eventInfoDtoOptional = eventService.getSingleEventWithCommentsDto(eventId);
+
 
         if (eventInfoDtoOptional.isEmpty()) {
             return "events/noEventFound";
@@ -68,10 +74,29 @@ public class EventController {
 
         model.addAttribute("event", eventInfoDtoOptional.get());
 
-//        List<CommentDto> postComments = postService.getCommentsForPost(postId);
-//        model.addAttribute("postComments", postComments);
+        List<EventCommentDto> eventComments = eventService.getCommentsForEvent(eventId);
+        model.addAttribute("eventComments", eventComments);
 
         return "events/singleEventPage";
+    }
+
+    @PostMapping("/events/{eventId}/comment/add")
+    public String handleNewCommentForm(@PathVariable Long eventId,
+                                       @ModelAttribute @Valid NewCommentForm newCommentForm,
+                                       BindingResult bindingResult, Model model) {
+
+        log.info("New COMMENT: {}", newCommentForm);
+        log.info("New COMMENT ERRORS: {}", bindingResult.getAllErrors());
+
+        if (bindingResult.hasErrors()) {
+            return "redirect:/events/" + eventId;
+        }
+
+        model.addAttribute("loggedAs", userContextService.getCurrentlyLoggedUserEmail());
+
+        eventService.addNewComment(eventId, newCommentForm);
+
+        return "redirect:/events/" + eventId;
     }
 
 }

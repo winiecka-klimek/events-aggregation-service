@@ -1,31 +1,27 @@
 package Javaldz26.event_aggregation_service.dtos;
 
-import Javaldz26.event_aggregation_service.entities.User;
-
 import java.time.LocalDateTime;
+import java.util.List;
 
-public class EventInfoDto {
+public class EventWithCommentsDto {
 
-    private Long id;
-
+    private Long eventId;
     private String eventTitle;
-
     private String eventDescription;
-
     private LocalDateTime startDate;
-
     private LocalDateTime endDate;
+    private List<EventCommentDto> eventComments;
 
-    public EventInfoDto(Long id, String eventTitle, String eventDescription, LocalDateTime startDate, LocalDateTime endDate) {
-        this.id = id;
+    public EventWithCommentsDto(Long eventId, String eventTitle, String eventDescription, LocalDateTime startDate, LocalDateTime endDate) {
+        this.eventId = eventId;
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public Long getId() {
-        return id;
+    public Long getEventId() {
+        return eventId;
     }
 
     public String getEventTitle() {
@@ -44,4 +40,11 @@ public class EventInfoDto {
         return endDate;
     }
 
+    public List<EventCommentDto> getEventComments() {
+        return eventComments;
+    }
+
+    public void setEventComments(List<EventCommentDto> eventComments) {
+        this.eventComments = eventComments;
+    }
 }

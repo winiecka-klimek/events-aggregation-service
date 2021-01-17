@@ -1,6 +1,7 @@
 package Javaldz26.event_aggregation_service.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,6 +14,7 @@ public class Event {
 
     private String eventTitle;
 
+    @Size(max = 10000)
     private String eventDescription;
 
     private LocalDateTime startDate;

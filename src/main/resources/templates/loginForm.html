@@ -24,7 +24,11 @@
         <label for="exampleInputPassword1" class="form-label">Password:</label>
         <input type="password" name="hiddenPassword" class="form-control" id="exampleInputPassword1">
     </div>
-    <button type="submit" class="btn btn-primary">Sign in</button>
+    <button type="submit" class="btn btn-primary">Log in</button>
 </form>
+
+<div th:if="${error != null}">
+    <span th:text="${error}"></span>
+</div>
 </body>
 </html>

@@ -22,7 +22,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                    .antMatchers("/events/add").hasAuthority("ROLE_REGULAR_USER")
+                    .antMatchers("/events/add").authenticated()
+//                    .antMatchers("/events/add").hasAuthority("ROLE_REGULAR_USER")
                     .anyRequest().permitAll()
                 .and()
                     .formLogin()
@@ -30,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginProcessingUrl("/login-submit-data")
                     .usernameParameter("loginUserName")
                     .passwordParameter("hiddenPassword")
-                    .failureUrl("/login?status=error")
+//                    .failureUrl("/login?status=error")
+                    .failureUrl("/login-error")
                     .defaultSuccessUrl("/")
                 .and()
                     .logout()
