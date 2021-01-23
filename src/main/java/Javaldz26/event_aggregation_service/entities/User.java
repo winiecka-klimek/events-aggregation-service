@@ -18,6 +18,7 @@ public class User {
 
     private String nickname;
 
+    @Column(length = 100)
     private String password;
 
     private LocalDateTime created = LocalDateTime.now();

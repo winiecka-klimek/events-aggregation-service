@@ -70,14 +70,20 @@
                     </li>
                 </ul>
                 <form class="d-flex" th:action="@{/events/search}" method="get">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <input class="form-control me-2" type="search" th:text="${searchPhrase}" th:value="${searchPhrase}" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
         </div>
+</th:block>
 
-
-
+<th:block th:fragment="events">
+    <div th:each="event : ${events}">
+        <h2><a th:href="@{/event/{eventId}(eventId=${event.id})}" th:text="${event.eventTitle}">Event title</a></h2>
+        <div th:text="${#temporals.format(event.startDate, 'yyyy-MM-dd HH:mm')}"></div>
+        <div th:text="${#temporals.format(event.endDate, 'yyyy-MM-dd HH:mm')}"></div>
+        <p th:text="${#strings.abbreviate(event.eventDescription, 50)}"></p>
+    </div>
 </th:block>
 
 </body>

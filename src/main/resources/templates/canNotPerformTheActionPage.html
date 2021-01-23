@@ -2,14 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Eventus - search results</title>
+    <title>Eventus - no event found!</title>
 </head>
 <body>
 <div th:replace="fragments :: navBar"></div>
-
-<h1>Your search results:</h1>
-
-<div th:replace="fragments :: events"></div>
+<h1>You have no authorisation to perform this action!</h1>
+<h2 style="color: gray">Please register / login</h2>
 
 </body>
 </html>

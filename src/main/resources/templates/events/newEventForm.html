@@ -10,9 +10,13 @@
     Title: <input type="text" th:field="*{eventTitle}" placeholder="Enter event title...">
     <span th:errors="*{eventTitle}"></span>
     <br>
-    Start date:
+    Start date: <input type="text" th:field="*{startDate}" placeholder="Enter event title...">
+    <span th:errors="*{#temporals.format(startDate, 'yyyy-MM-dd HH:mm'}"></span>
+    <span th:errors="*{startDate}"></span>
     <br>
-    End date:
+    End date:  <input type="text" th:field="*{endDate}" placeholder="Enter event title...">
+    <span th:errors="*{#temporals.format(endDate, 'yyyy-MM-dd HH:mm'}"></span>
+    <span th:errors="*{endDate}"></span>
     <br>
     Description: <textarea th:field="*{eventDescription}" rows="10" cols="100"></textarea>
     <span th:errors="*{eventDescription}"></span>

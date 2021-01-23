@@ -36,7 +36,7 @@
 </form>
 </div>
 
-<div th:each="eventComment : ${eventComments}">
+<div th:each="eventComment : ${event.eventComments}">
     <div><span th:text="${eventComment.commentatorNickname}">Nick</span> (<span th:text="${#temporals.format(eventComment.commentAdded, 'yyyy-MM-dd HH:mm')}"></span>)</div>
     <div th:text="${eventComment.commentText}">Comment text...</div>
 </div>

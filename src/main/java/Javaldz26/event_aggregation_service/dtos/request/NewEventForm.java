@@ -1,5 +1,7 @@
 package Javaldz26.event_aggregation_service.dtos.request;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -15,9 +17,11 @@ public class NewEventForm {
     private String eventDescription;
 
     @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime startDate;
 
     @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
     private LocalDateTime endDate;
 
     public String getEventTitle() {

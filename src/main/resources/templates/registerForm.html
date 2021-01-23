@@ -9,24 +9,23 @@
 <body>
 <div th:replace="fragments :: navBar"></div>
 <h1>Register page</h1>
-<form th:action="@{/register}" method="post">
+<form th:action="@{/register}" th:object="${newUserForm}" method="post">
     <div class="mb-3">
         <label for="email" class="form-label">Email:</label>
-        <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp">
+        <input type="email" th:field="*{email}" name="email" class="form-control" id="email" aria-describedby="emailHelp">
+        <span th:errors="*{email}"></span>
     </div>
     <div class="mb-3">
         <label for="nickname" class="form-label">Nickname:</label>
-        <input type="text" name="nickname" class="form-control" id="nickname">
+        <input type="text" th:field="*{nickname}" name="nickname" class="form-control" id="nickname">
+        <span th:errors="*{nickname}"></span>
     </div>
     <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Password:</label>
-        <input type="password" name="password" class="form-control" id="exampleInputPassword1">
-                <div id="exampleInputPassword1" class="form-text">Password should be 8 to 30 characters long</div>
+        <input type="password" th:field="*{password}" name="password" class="form-control" id="exampleInputPassword1">
+        <span th:errors="*{password}"></span>
+<!--                <div id="exampleInputPassword1" class="form-text">Password should be 8 to 30 characters long</div>-->
     </div>
-<!--    <div class="mb-3 form-check">-->
-<!--        <input type="checkbox" class="form-check-input" id="exampleCheck1">-->
-<!--        <label class="form-check-label" for="exampleCheck1">Check me out</label>-->
-<!--    </div>-->
     <button type="submit" class="btn btn-primary">Register</button>
 </form>
 

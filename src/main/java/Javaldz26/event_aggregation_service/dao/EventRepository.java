@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    List<Event> findEventByEventTitleContainingIgnoreCaseOrderByStartDate(String searchFraze);
+    List<Event> findEventByEventTitleContaining(String searchPhrase, Sort sort);
 
-    List<Event> findAllByToDateAfter(LocalDateTime currentTime, Sort startDate);
+    List<Event> findAllByEndDateAfter(LocalDateTime currentTime, Sort startDate);
 }

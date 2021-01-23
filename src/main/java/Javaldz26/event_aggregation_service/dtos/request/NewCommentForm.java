@@ -11,16 +11,6 @@ public class NewCommentForm {
     @Size(max = 500, message = "Maximum comment length is 500 characters")
     private String  commentText;
 
-    private User commentator;
-
-    public User getCommentator() {
-        return commentator;
-    }
-
-    public void setCommentator(User commentator) {
-        this.commentator = commentator;
-    }
-
     public String getCommentatorNickname() {
         return commentatorNickname;
     }
@@ -42,7 +32,6 @@ public class NewCommentForm {
         return "NewCommentForm{" +
                 "commentatorNickname='" + commentatorNickname + '\'' +
                 ", commentText='" + commentText + '\'' +
-                ", commentator=" + commentator +
                 '}';
     }
 }

@@ -7,22 +7,15 @@
 </head>
 <body>
 <div th:replace="fragments :: navBar"></div>
-<!--<form th:action="@{/login-submit-data}" method="post">-->
-<!--    <input type="text" name="username" placeholder="Enter your e-mail...">-->
-<!--    <br>-->
-<!--    <input type="password" name="password" placeholder="Enter your password...">-->
-<!--    <br>-->
-<!--    <input type="submit" value="Login">-->
-<!--</form>-->
 
 <form th:action="@{/login-submit-data}" method="post">
     <div class="mb-3">
-        <label for="email" class="form-label">Email:</label>
-        <input type="email" name="loginUserName" class="form-control" id="email" aria-describedby="emailHelp">
+        <label for="loginUserName" class="form-label">Email:</label>
+        <input type="email" name="loginUserName" class="form-control" id="loginUserName" aria-describedby="emailHelp">
     </div>
     <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password:</label>
-        <input type="password" name="hiddenPassword" class="form-control" id="exampleInputPassword1">
+        <label for="hiddenPassword" class="form-label">Password:</label>
+        <input type="password" name="hiddenPassword" class="form-control" id="hiddenPassword">
     </div>
     <button type="submit" class="btn btn-primary">Log in</button>
 </form>

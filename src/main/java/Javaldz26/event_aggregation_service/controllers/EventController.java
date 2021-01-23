@@ -1,7 +1,5 @@
 package Javaldz26.event_aggregation_service.controllers;
 
-import Javaldz26.event_aggregation_service.dtos.EventCommentDto;
-import Javaldz26.event_aggregation_service.dtos.EventInfoDto;
 import Javaldz26.event_aggregation_service.dtos.EventWithCommentsDto;
 import Javaldz26.event_aggregation_service.dtos.request.NewAttendeeForm;
 import Javaldz26.event_aggregation_service.dtos.request.NewCommentForm;
@@ -15,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -31,22 +28,21 @@ public class EventController {
     }
 
     @GetMapping("events/add")
-    public String showNewEventForm() {
-//        final NewEventForm newEventForm= new NewEventForm();
+    public String showNewEventForm(Model model) {
+        final NewEventForm newEventForm= new NewEventForm();
+        model.addAttribute(newEventForm);
         return "events/newEventForm";
     }
 
     @PostMapping("/events/add")
     public String handleNewEventForm(@ModelAttribute @Valid NewEventForm newEventForm,
-                                     BindingResult bindingResult, Model  model) {
+                                     BindingResult bindingResult) {
         log.info("New EVENT: {}", newEventForm);
         log.info("New EVENT ERRORS: {}", bindingResult.getAllErrors());
 
         if (bindingResult.hasErrors()) {
             return "events/newEventForm";
         }
-
-        model.addAttribute("loggedAs", userContextService.getCurrentlyLoggedUserEmail());
 
         eventService.saveNewEvent(newEventForm);
 
@@ -56,18 +52,19 @@ public class EventController {
     @GetMapping("/events/search")
     public String findEventByTitle(Model model, String searchPhrase){
 
-        model.addAttribute("searchFraze", searchPhrase);
+        model.addAttribute("searchPhrase", searchPhrase);
         model.addAttribute("events", eventService.searchEventByEventTitleFragment(searchPhrase));
 
-        return "redirect:/events/searchResultsPage";
+        return "/events/searchResultsPage";
 
     }
 
     @GetMapping("/events/{eventId}")
     public String showSinglePostPage(@PathVariable Long eventId, Model model) {
 
-        final Optional<EventWithCommentsDto> eventInfoDtoOptional = eventService.getSingleEventWithCommentsDto(eventId);
+        final NewCommentForm newCommentForm = new NewCommentForm();
 
+        final Optional<EventWithCommentsDto> eventInfoDtoOptional = eventService.getSingleEventWithCommentsDto(eventId);
 
         if (eventInfoDtoOptional.isEmpty()) {
             return "events/noEventFound";
@@ -75,16 +72,13 @@ public class EventController {
 
         model.addAttribute("event", eventInfoDtoOptional.get());
 
-        List<EventCommentDto> eventComments = eventService.getCommentsForEvent(eventId);
-        model.addAttribute("eventComments", eventComments);
-
         return "events/singleEventPage";
     }
 
     @PostMapping("/events/{eventId}/comment/add")
     public String handleNewCommentForm(@PathVariable Long eventId,
                                        @ModelAttribute @Valid NewCommentForm newCommentForm,
-                                       BindingResult bindingResult, Model model) {
+                                       BindingResult bindingResult) {
 
         log.info("New COMMENT: {}", newCommentForm);
         log.info("New COMMENT ERRORS: {}", bindingResult.getAllErrors());
@@ -93,9 +87,8 @@ public class EventController {
             return "redirect:/events/" + eventId;
         }
 
-        model.addAttribute("loggedAs", userContextService.getCurrentlyLoggedUserEmail());
-
-        eventService.addNewComment(eventId, newCommentForm);
+        String currentlyLoggedUserEmail = userContextService.getCurrentlyLoggedUserEmail();
+        eventService.addNewComment(eventId, newCommentForm, currentlyLoggedUserEmail);
 
         return "redirect:/events/" + eventId;
     }
@@ -103,8 +96,18 @@ public class EventController {
     @PostMapping("/events/{eventId}/sign-up-for-event")
     public String submitForEventForm(@PathVariable Long eventId,
                                      @ModelAttribute @Valid NewAttendeeForm newAttendeeForm,
-                                     BindingResult bindingResult, Model model) {
+                                     BindingResult bindingResult) {
 
+        log.info("New ATTENDEE: {}", newAttendeeForm);
+        log.info("New ATTENDEE ERRORS: {}", bindingResult.getAllErrors());
+
+        if(bindingResult.hasErrors()) {
+            return "singleEventPage";
+        }
+
+        eventService.signUserForEvent(newAttendeeForm);
+
+        return "signedForEventThankYouPage";
     }
 
 }
