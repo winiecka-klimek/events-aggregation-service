@@ -32,7 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginProcessingUrl("/login-submit-data")
                     .usernameParameter("loginUserName")
                     .passwordParameter("hiddenPassword")
-//                    .failureUrl("/login?status=error")
                     .failureUrl("/login-error")
                     .defaultSuccessUrl("/")
                 .and()
@@ -51,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "FROM users u WHERE u.email = ?")
                 .authoritiesByUsernameQuery("SELECT u.email, r.role_name " +
                         "FROM users u " +
-                        "JOIN users_roles ur ON u.id = ur.user_entity_id " +
+                        "JOIN users_roles ur ON u.id = ur.user_id " +
                         "JOIN roles r ON ur.roles_id = r.id " +
                         "WHERE u.email = ?")
                 .passwordEncoder(passwordEncoder);

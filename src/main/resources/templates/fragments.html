@@ -57,10 +57,10 @@
         <div th:if="${loggedAs != null}">
             <ul>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/events}">Add new event</a>
+                    <a class="nav-link" th:href="@{/events/add}">Add new event</a>
                 </li>
             <li class="nav-item">
-                <a class="nav-link">Logged as <span th:text="${loggedAs.email}"></span> </a>
+                <a class="nav-link">Logged as <span th:text="${loggedAs}"></span> </a>
             </li>
             </ul>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
