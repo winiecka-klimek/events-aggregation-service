@@ -2,27 +2,52 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Eventus - add new  event</title>
+    <title>Eventus - add new event</title>
+    <th:block th:replace="fragments :: headScripts"></th:block>
 </head>
 <body>
 <div th:replace="fragments :: navBar"></div>
+
 <form th:action="@{/events/add}" th:object="${newEventForm}" method="post">
-    Title: <input type="text" th:field="*{eventTitle}" placeholder="Enter event title...">
-    <span th:errors="*{eventTitle}"></span>
-    <br>
-    Start date: <input type="text" th:field="*{#temporals.format(startDate, 'yyyy-MM-dd HH:mm')}" placeholder="Enter event title...">
-    <span th:errors="*{#temporals.format(startDate, 'yyyy-MM-dd HH:mm')}"></span>
-    <span th:errors="*{startDate}"></span>
-    <br>
-    End date:  <input type="text" th:field="*{#temporals.format(endDate, 'yyyy-MM-dd HH:mm')}" placeholder="Enter event title...">
-    <span th:errors="*{#temporals.format(endDate, 'yyyy-MM-dd HH:mm')}"></span>
-    <span th:errors="*{endDate}"></span>
-    <br>
-    Description: <textarea th:field="*{eventDescription}" rows="10" cols="100"></textarea>
-    <span th:errors="*{eventDescription}"></span>
-    <br>
-    <input type="submit" value="Add new event">
+    <div class="mb-3">
+        <label for="eventTitle" th:field="*{eventTitle}" class="form-label">Event title:</label>
+        <input type="text" name="eventTitle" class="form-control" id="eventTitle" >
+        <span th:errors="*{eventTitle}"></span>
+    </div>
+    <div class="mb-3">
+        <label for="eventDescription" th:field="*{eventDescription}" class="form-label">Description:</label>
+        <input type="textarea"  name="eventDescription" class="form-control" id="eventDescription">
+        <span th:errors="*{eventDescription}"></span>
+    </div>
+    <div class="mb-3">
+        <label for="startDate" th:field="*{startDate}" class="form-label">Start date:</label>
+        <input type="text" name="startDate" class="form-control" id="startDate">
+        <span th:errors="*{startDate}"></span>
+    </div>
+    <div class="mb-3">
+        <label for="endDate" th:field="*{endDate}" class="form-label">End date:</label>
+        <input type="text" name="endDate" class="form-control" id="endDate">
+        <span th:errors="*{endDate}"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Add event</button>
 </form>
+<!--<form th:action="@{/events/add}" th:object="${newEventForm}" method="post">-->
+<!--    Title: <input type="text" th:field="*{eventTitle}" placeholder="Enter event title...">-->
+<!--    <span th:errors="*{eventTitle}"></span>-->
+<!--    <br>-->
+<!--    Start date: <input type="text" th:field="*{#temporals.format(startDate, 'yyyy-MM-dd HH:mm')}" placeholder="Enter event title...">-->
+<!--    <span th:errors="*{#temporals.format(startDate, 'yyyy-MM-dd HH:mm')}"></span>-->
+<!--    <span th:errors="*{startDate}"></span>-->
+<!--    <br>-->
+<!--    End date:  <input type="text" th:field="*{#temporals.format(endDate, 'yyyy-MM-dd HH:mm')}" placeholder="Enter event title...">-->
+<!--    <span th:errors="*{#temporals.format(endDate, 'yyyy-MM-dd HH:mm')}"></span>-->
+<!--    <span th:errors="*{endDate}"></span>-->
+<!--    <br>-->
+<!--    Description: <textarea th:field="*{eventDescription}" rows="10" cols="100"></textarea>-->
+<!--    <span th:errors="*{eventDescription}"></span>-->
+<!--    <br>-->
+<!--    <input type="submit" value="Add new event">-->
+<!--</form>-->
 
 
 

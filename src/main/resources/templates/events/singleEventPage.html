@@ -7,24 +7,26 @@
 <body>
 <div th:replace="fragments :: navBar"></div>
 
-<h1><span th:text="${event.eventTitle}"></span></h1>
-<p style="color: gray">Start date: <span th:text="${#temporals.format(event.startDate, 'yyyy-MM-dd HH:mm')}"></span></p>
-<p style="color: gray">End date: <span th:text="${#temporals.format(event.endDate, 'yyyy-MM-dd HH:mm')}"></span></p>
-<p><span th:text="${event.eventDescription}"></span></p>
+<h2> <span th:object="${newEventForm}" th:text=" </h2>
+<!--<h1><span th:text="${event.eventTitle}"></span></h1>-->
+<!--<p style="color: gray">Start date: <span th:text="${#temporals.format(event.startDate, 'yyyy-MM-dd HH:mm')}"></span></p>-->
+<!--<p style="color: gray">End date: <span th:text="${#temporals.format(event.endDate, 'yyyy-MM-dd HH:mm')}"></span></p>-->
+<!--<p><span th:text="${event.eventDescription}"></span></p>-->
 
 <h3>Sign up for this event</h3>
-<div th:if="${loggedAs != null}">
-    <form th:action="@{/events/{eventId}/sign-up-for-event}" th:object="${newAttendeeForm}" method="post">
-        Nick: <input type="text" th:field="*{attendeeNickname}" placeholder="Enter your nickname">
-        <span th:errors="*{attendeeEmail}"></span>
-        Email: <input type="text" th:field="*{attendeeEmail}" placeholder="Enter your email">
-        <span th:errors="*{attendeeEmail}"></span>
-        <br>
-        <input type="submit" value="Sign up for event">
-    </form>
-</div>
+<!--<div th:if="${loggedAs != null}">-->
+<!--    <form th:action="@{/events/{eventId}/sign-up-for-event}" th:object="${newAttendeeForm}" method="post">-->
+<!--        Nick: <input type="text" th:field="*{attendeeNickname}" placeholder="Enter your nickname">-->
+<!--        <span th:errors="*{attendeeEmail}"></span>-->
+<!--        Email: <input type="text" th:field="*{attendeeEmail}" placeholder="Enter your email">-->
+<!--        <span th:errors="*{attendeeEmail}"></span>-->
+<!--        <br>-->
+<!--        <input type="submit" value="Sign up for event">-->
+<!--    </form>-->
+<!--</div>-->
 
 <div th:if="${loggedAs != null}">
+
 <form th:action="@{/events/{eventId}/comment/add}" th:object="${newCommentForm}" method="post">
     Nickname: <input type="text" th:field="*{commentatorNickname}" placeholder="Enter nickname...">
     <span th:errors="*{commentatorNickname}"></span>
