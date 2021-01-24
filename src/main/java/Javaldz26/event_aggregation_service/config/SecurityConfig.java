@@ -24,6 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                     .antMatchers("/events/add").hasAuthority("ROLE_REGULAR_USER")
                     .antMatchers("/events/*/comment/add").authenticated()
+                    .antMatchers("/events/*/sign-up-for-event").authenticated()
 //                    .antMatchers("/events/add").hasAuthority("ROLE_REGULAR_USER")
                     .anyRequest().permitAll()
                 .and()
@@ -36,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .defaultSuccessUrl("/")
                 .and()
                     .logout()
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout-user", "GET"))
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                     .logoutSuccessUrl("/")
                     .invalidateHttpSession(true)
                 ;

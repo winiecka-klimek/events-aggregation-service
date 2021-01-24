@@ -3,41 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${'Eventus - ' + event.eventTitle}"> Eventus - single event</title>
+    <th:block th:replace="fragments :: headScripts"></th:block>
 </head>
 <body>
 <div th:replace="fragments :: navBar"></div>
 
-<h2> <span th:object="${newEventForm}" th:text=" </h2>
-<!--<h1><span th:text="${event.eventTitle}"></span></h1>-->
-<!--<p style="color: gray">Start date: <span th:text="${#temporals.format(event.startDate, 'yyyy-MM-dd HH:mm')}"></span></p>-->
-<!--<p style="color: gray">End date: <span th:text="${#temporals.format(event.endDate, 'yyyy-MM-dd HH:mm')}"></span></p>-->
-<!--<p><span th:text="${event.eventDescription}"></span></p>-->
 
-<h3>Sign up for this event</h3>
-<!--<div th:if="${loggedAs != null}">-->
-<!--    <form th:action="@{/events/{eventId}/sign-up-for-event}" th:object="${newAttendeeForm}" method="post">-->
-<!--        Nick: <input type="text" th:field="*{attendeeNickname}" placeholder="Enter your nickname">-->
-<!--        <span th:errors="*{attendeeEmail}"></span>-->
-<!--        Email: <input type="text" th:field="*{attendeeEmail}" placeholder="Enter your email">-->
-<!--        <span th:errors="*{attendeeEmail}"></span>-->
-<!--        <br>-->
-<!--        <input type="submit" value="Sign up for event">-->
-<!--    </form>-->
-<!--</div>-->
+<h1 style="text-align: center"><span th:text="${event.eventTitle}">Title</span></h1>
+<div><p style="color: gray"><span th:text="${#temporals.format(event.startDate, 'yyyy-MM-dd HH:mm')}"></span> to <span th:text="${#temporals.format(event.endDate, 'yyyy-MM-dd HH:mm')}"></span>
+</p>
+</div>
+<p style="font-size: 22px"><span th:text="${event.eventDescription}"></span></p>
 
 <div th:if="${loggedAs != null}">
+    <h3 style="text-align: center">Sign up for this event</h3>
+    <form th:action="@{/events/{eventId}/sign-up-for-event}" th:object="${newUserRegisteredForEventForm}" method="post">
+        <div class="mb-3">
+            <label for="registeredUserNickname" th:field="*{registeredUserNickname}" class="form-label">Nickname:</label>
+            <input type="text" name="registeredUserNickname" class="form-control" id="registeredUserNickname" >
+            <span th:errors="*{registeredUserNickname}"></span>
+        </div>
+        <div class="mb-3">
+            <label for="registeredUserEmail" th:field="*{registeredUserEmail}" class="form-label">Email:</label>
+            <input type="textarea"  name="registeredUserEmail" class="form-control" id="registeredUserEmail">
+            <span th:errors="*{registeredUserEmail}"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign up</button>
+    </form>
+</div>
+<br>
+<br>
 
-<form th:action="@{/events/{eventId}/comment/add}" th:object="${newCommentForm}" method="post">
-    Nickname: <input type="text" th:field="*{commentatorNickname}" placeholder="Enter nickname...">
-    <span th:errors="*{commentatorNickname}"></span>
+<div th:if="${loggedAs == null}">
     <br>
-    Your comment: <input type="text" th:field="*{commentText}" placeholder="Enter comment...">
-    <span th:errors="*{commentText}"></span>
-    <br>
-    <input type="submit" value="Add comment">
-</form>
+    <h5 style="color:gray">To register for this event you must be logged in</h5>
 </div>
 
+<div th:if="${loggedAs != null}">
+<br>
+    <h3 style="text-align: center">Add comment:</h3>
+    <br>
+    <form th:action="@{/events/{eventId}/comment/add}" th:object="${newCommentForm}" method="post">
+        <div class="mb-3">
+            <label for="commentatorNickname" th:field="*{commentatorNickname}" class="form-label">Nickname:</label>
+            <input type="text" name="commentatorNickname" class="form-control" id="commentatorNickname" >
+            <span th:errors="*{commentatorNickname}"></span>
+        </div>
+        <div class="mb-3">
+            <label for="commentText" th:field="*{commentText}" class="form-label">Enter comment:</label>
+            <input type="textarea"  name="commentText" class="form-control" id="commentText">
+            <span th:errors="*{commentText}"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Add comment</button>
+    </form>
+</div>
+<br>
+<br>
+<h3 style="text-align: center">Comments:</h3>
 <div th:each="eventComment : ${event.eventComments}">
     <div><span th:text="${eventComment.commentatorNickname}">Nick</span> (<span th:text="${#temporals.format(eventComment.commentAdded, 'yyyy-MM-dd HH:mm')}"></span>)</div>
     <div th:text="${eventComment.commentText}">Comment text...</div>

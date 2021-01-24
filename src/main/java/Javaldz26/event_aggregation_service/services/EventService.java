@@ -3,18 +3,20 @@ package Javaldz26.event_aggregation_service.services;
 import Javaldz26.event_aggregation_service.dao.EventCommentRepository;
 import Javaldz26.event_aggregation_service.dao.EventRepository;
 import Javaldz26.event_aggregation_service.dao.UserRepository;
+import Javaldz26.event_aggregation_service.dao.UsersRegisteredForEventsRepository;
 import Javaldz26.event_aggregation_service.dtos.EventCommentDto;
 import Javaldz26.event_aggregation_service.dtos.EventInfoDto;
 import Javaldz26.event_aggregation_service.dtos.EventWithCommentsDto;
-import Javaldz26.event_aggregation_service.dtos.request.NewAttendeeForm;
+import Javaldz26.event_aggregation_service.dtos.request.NewUserRegisteredForEventForm;
 import Javaldz26.event_aggregation_service.dtos.request.NewCommentForm;
 import Javaldz26.event_aggregation_service.entities.Event;
 import Javaldz26.event_aggregation_service.dtos.request.NewEventForm;
 import Javaldz26.event_aggregation_service.entities.EventComment;
 import Javaldz26.event_aggregation_service.entities.User;
+import Javaldz26.event_aggregation_service.entities.UsersRegisteredForEvents;
 import Javaldz26.event_aggregation_service.exceptions.EventNotFoundException;
 import Javaldz26.event_aggregation_service.exceptions.NoAuthorizationToPerformTheAction;
-import Javaldz26.event_aggregation_service.exceptions.UserDoesntExistException;
+import Javaldz26.event_aggregation_service.exceptions.UserAlreadyRegisteredForEventException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -33,12 +35,14 @@ public class EventService {
     private final EventCommentRepository eventCommentRepository;
     private final UserRepository userRepository;
     private final UserContextService userContextService;
+    private final UsersRegisteredForEventsRepository usersRegisteredForEventsRepository;
 
-    public EventService(EventRepository eventRepository, EventCommentRepository eventCommentRepository, UserRepository userRepository, UserContextService userContextService) {
+    public EventService(EventRepository eventRepository, EventCommentRepository eventCommentRepository, UserRepository userRepository, UserContextService userContextService, UsersRegisteredForEventsRepository usersRegisteredForEventsRepository) {
         this.eventRepository = eventRepository;
         this.eventCommentRepository = eventCommentRepository;
         this.userRepository = userRepository;
         this.userContextService = userContextService;
+        this.usersRegisteredForEventsRepository = usersRegisteredForEventsRepository;
     }
 
     @Transactional
@@ -104,7 +108,7 @@ public class EventService {
         final List<EventCommentDto> eventCommentsDto = eventCommentRepository
                 .findByEventId(eventId, Sort.by("commentAdded").descending())
                 .stream()
-                .map(eventComment -> getEventCommentDto(eventComment))
+                .map(this::getEventCommentDto)
                 .collect(Collectors.toList());
 
         eventWithCommentsDto.setEventComments(eventCommentsDto);
@@ -145,12 +149,34 @@ public class EventService {
 
     }
 
-    public void signUserForEvent(NewAttendeeForm newAttendeeForm) {
+    @Transactional
+    public void signUserForEvent(Long eventId, NewUserRegisteredForEventForm newUserRegisteredForEventForm, String currentlyLoggedUserEmail) {
 
-        final boolean existsByEmail = userRepository.existsByEmail(newAttendeeForm.getAttendeeEmail());
+//        final User user = userRepository.findUserByEmail(currentlyLoggedUserEmail)
+//                .orElseThrow(() -> new NoAuthorizationToPerformTheAction(currentlyLoggedUserEmail));
 
-        if(!existsByEmail) {
-            throw new UserDoesntExistException(newAttendeeForm.getAttendeeEmail());
+        final boolean alreadySignedForEvent = usersRegisteredForEventsRepository
+                .existsByRegisteredUserEmail(newUserRegisteredForEventForm.getRegisteredUserEmail());
+
+        if(alreadySignedForEvent) {
+            throw new UserAlreadyRegisteredForEventException(newUserRegisteredForEventForm.getRegisteredUserEmail());
         }
+
+        final User user = userRepository.findUserByEmail(currentlyLoggedUserEmail)
+                .orElseThrow(() -> new NoAuthorizationToPerformTheAction(currentlyLoggedUserEmail));
+
+        final Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventNotFoundException(eventId));
+
+        final UsersRegisteredForEvents usersRegisteredForEvents = new UsersRegisteredForEvents();
+
+        usersRegisteredForEvents.setRegisteredUserEmail(newUserRegisteredForEventForm.getRegisteredUserEmail());
+        usersRegisteredForEvents.setRegisteredUserNickname(newUserRegisteredForEventForm.getRegisteredUserNickname());
+//        usersRegisteredForEvents.ge
+        usersRegisteredForEvents.addEvent(event);
+        usersRegisteredForEvents.addUser(user);
+
+        usersRegisteredForEventsRepository.save(usersRegisteredForEvents);
+
     }
 }

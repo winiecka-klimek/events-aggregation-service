@@ -1,7 +1,7 @@
 package Javaldz26.event_aggregation_service.controllers;
 
 import Javaldz26.event_aggregation_service.dtos.EventWithCommentsDto;
-import Javaldz26.event_aggregation_service.dtos.request.NewAttendeeForm;
+import Javaldz26.event_aggregation_service.dtos.request.NewUserRegisteredForEventForm;
 import Javaldz26.event_aggregation_service.dtos.request.NewCommentForm;
 import Javaldz26.event_aggregation_service.dtos.request.NewEventForm;
 import Javaldz26.event_aggregation_service.services.EventService;
@@ -62,6 +62,8 @@ public class EventController {
     @GetMapping("/events/{eventId}")
     public String showSinglePostPage(@PathVariable Long eventId, Model model) {
 
+        final NewUserRegisteredForEventForm newUserRegisteredForEventForm = new NewUserRegisteredForEventForm();
+
         final NewCommentForm newCommentForm = new NewCommentForm();
 
         final Optional<EventWithCommentsDto> eventInfoDtoOptional = eventService.getSingleEventWithCommentsDto(eventId);
@@ -69,7 +71,8 @@ public class EventController {
         if (eventInfoDtoOptional.isEmpty()) {
             return "events/noEventFound";
         }
-
+        model.addAttribute(newUserRegisteredForEventForm);
+        model.addAttribute(newCommentForm);
         model.addAttribute("event", eventInfoDtoOptional.get());
 
         return "events/singleEventPage";
@@ -95,19 +98,20 @@ public class EventController {
 
     @PostMapping("/events/{eventId}/sign-up-for-event")
     public String submitForEventForm(@PathVariable Long eventId,
-                                     @ModelAttribute @Valid NewAttendeeForm newAttendeeForm,
+                                     @ModelAttribute @Valid NewUserRegisteredForEventForm newUserRegisteredForEventForm,
                                      BindingResult bindingResult) {
 
-        log.info("New ATTENDEE: {}", newAttendeeForm);
-        log.info("New ATTENDEE ERRORS: {}", bindingResult.getAllErrors());
+        log.info("New USER REGISTERED FOR EVENT: {}", newUserRegisteredForEventForm);
+        log.info("New USER REGISTERED FOR EVENT: {}", bindingResult.getAllErrors());
 
         if(bindingResult.hasErrors()) {
-            return "singleEventPage";
+            return "events/canNotRegisterForEventPage";
         }
 
-        eventService.signUserForEvent(newAttendeeForm);
+        String currentlyLoggedUserEmail = userContextService.getCurrentlyLoggedUserEmail();
+        eventService.signUserForEvent(eventId, newUserRegisteredForEventForm, currentlyLoggedUserEmail);
 
-        return "signedForEventThankYouPage";
+        return "events/signedForEventThankYouPage";
     }
 
 }

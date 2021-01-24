@@ -19,13 +19,14 @@
 </head>
 <body>
 <th:block th:fragment="navBar">
-<nav class="navbar navbar-dark bg-dark">
-    <div class="container-fluid">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div th:if="${loggedAs == null}" class="container-fluid">
         <a class="navbar-brand" role="button" th:href="@{/}">Eventus</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div th:if="${loggedAs == null}" class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" role="button" th:href="@{/login}">Login</a>
@@ -33,19 +34,6 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" role="button" th:href="@{/register}">Register</a>
                 </li>
-                <!--                <li class="nav-item">-->
-                <!--                    <a class="nav-link" href="#">Link</a>-->
-                <!--                </li>-->
-                <!--                <li class="nav-item dropdown">-->
-                <!--                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-                <!--                        Login/Register-->
-                <!--                    </a>-->
-                <!--                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
-                <!--                        <li><a class="dropdown-item" th:href="@{/login}">Login</a></li>-->
-                <!--                        <li><hr class="dropdown-divider"></li>-->
-                <!--                        <li><a class="dropdown-item" th:href="@{/register}">Register</a></li>-->
-                <!--                    </ul>-->
-                <!--                </li>-->
             </ul>
             <form class="d-flex" th:action="@{/events/search}" method="get">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -54,32 +42,37 @@
         </div>
     </div>
 </nav>
-        <div th:if="${loggedAs != null}">
-            <ul>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/events/add}">Add new event</a>
-                </li>
-            <li class="nav-item">
-                <a class="nav-link">Logged as <span th:text="${loggedAs}"></span> </a>
-            </li>
-            </ul>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div th:if="${loggedAs != null}" class="container-fluid">
+            <a class="navbar-brand" role="button" th:href="@{/}">Eventus</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" role="button" th:href="@{/login}">Logout</a>
+                        <a class="nav-link active" aria-current="page" role="button" th:href="@{/events/add}">Add new event</a>
                     </li>
-                </ul>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" >Logged as <span th:text="${loggedAs}"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" role="button" th:href="@{/logout}">Logout</a>
+                    </li>
+            </ul>
                 <form class="d-flex" th:action="@{/events/search}" method="get">
                     <input class="form-control me-2" type="search" th:text="${searchPhrase}" th:value="${searchPhrase}" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
         </div>
+    </nav>
 </th:block>
 
 <th:block th:fragment="events">
     <div th:each="event : ${events}">
-        <h3><a th:href="@{/event/{eventId}(eventId=${event.id})}" th:text="${event.eventTitle}">Event title</a></h3>
+        <h3><a th:href="@{/events/{eventId}(eventId=${event.id})}" th:text="${event.eventTitle}">Event title</a></h3>
         <div> <span th:text="${#temporals.format(event.startDate, 'yyyy-MM-dd HH:mm')}"></span> to
         <span th:text="${#temporals.format(event.endDate, 'yyyy-MM-dd HH:mm')}"></span>
         </div>

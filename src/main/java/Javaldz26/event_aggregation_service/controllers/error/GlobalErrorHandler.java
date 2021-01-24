@@ -27,6 +27,14 @@ public class GlobalErrorHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserAlreadyRegisteredForEventException.class)
+    public String handle(UserAlreadyRegisteredForEventException e) {
+        log.warn("Global exception handling for:  {}", e.getMessage());
+
+        return "redirect:/events/canNotRegisterForEventPage";
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserWithSuchEmailExistsException.class)
     public String handle(UserWithSuchEmailExistsException e) {
         log.warn("Global exception handling for:  {}", e.getMessage());
