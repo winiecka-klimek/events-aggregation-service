@@ -81,4 +81,11 @@ public class UsersRegisteredForEvents {
         return users;
     }
 
+    public void signUp(User user) {
+        users.add(user);
+    }
+
+    public void signOff(User user) {
+        users.remove(user);
+    }
 }

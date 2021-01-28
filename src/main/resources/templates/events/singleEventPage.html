@@ -17,19 +17,17 @@
 
 <div th:if="${loggedAs != null}">
     <h3 style="text-align: center">Sign up for this event</h3>
-    <form th:action="@{/events/{eventId}/sign-up-for-event}" th:object="${newUserRegisteredForEventForm}" method="post">
-        <div class="mb-3">
-            <label for="registeredUserNickname" th:field="*{registeredUserNickname}" class="form-label">Nickname:</label>
-            <input type="text" name="registeredUserNickname" class="form-control" id="registeredUserNickname" >
-            <span th:errors="*{registeredUserNickname}"></span>
-        </div>
-        <div class="mb-3">
-            <label for="registeredUserEmail" th:field="*{registeredUserEmail}" class="form-label">Email:</label>
-            <input type="textarea"  name="registeredUserEmail" class="form-control" id="registeredUserEmail">
-            <span th:errors="*{registeredUserEmail}"></span>
-        </div>
+    <span th:if="${!isSignedForEvent}">
+    <form th:action="@{/events/{eventId}/sign-up-for-event(eventId=${event.id})}" method="post">
         <button type="submit" class="btn btn-primary">Sign up</button>
     </form>
+        </span>
+
+    <span th:if="${isSignedForEvent}">
+    <form th:action="@{/events/{eventId}/sign-off-from-event(eventId=${event.id})}" method="post">
+        <button type="submit" class="btn btn-primary">Sign of</button>
+    </form>
+        </span>
 </div>
 <br>
 <br>

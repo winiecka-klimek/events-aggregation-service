@@ -7,7 +7,6 @@ import Javaldz26.event_aggregation_service.dao.UsersRegisteredForEventsRepositor
 import Javaldz26.event_aggregation_service.dtos.EventCommentDto;
 import Javaldz26.event_aggregation_service.dtos.EventInfoDto;
 import Javaldz26.event_aggregation_service.dtos.EventWithCommentsDto;
-import Javaldz26.event_aggregation_service.dtos.request.NewUserRegisteredForEventForm;
 import Javaldz26.event_aggregation_service.dtos.request.NewCommentForm;
 import Javaldz26.event_aggregation_service.entities.Event;
 import Javaldz26.event_aggregation_service.dtos.request.NewEventForm;
@@ -16,7 +15,7 @@ import Javaldz26.event_aggregation_service.entities.User;
 import Javaldz26.event_aggregation_service.entities.UsersRegisteredForEvents;
 import Javaldz26.event_aggregation_service.exceptions.EventNotFoundException;
 import Javaldz26.event_aggregation_service.exceptions.NoAuthorizationToPerformTheAction;
-import Javaldz26.event_aggregation_service.exceptions.UserAlreadyRegisteredForEventException;
+import Javaldz26.event_aggregation_service.exceptions.UserDoesntExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -58,7 +57,6 @@ public class EventService {
             event.setEndDate(newEventForm.getEndDate());
             event.setOwner(owner);
 
-            eventRepository.save(event);
     }
 
     public List<EventInfoDto> getCurrentAndFutureEvents() {
@@ -116,7 +114,7 @@ public class EventService {
     }
 
     private EventCommentDto getEventCommentDto(EventComment eventComment) {
-        return new EventCommentDto(
+        return new EventCommentDto(eventComment.getId(),
                 eventComment.getCommentText(),
                 eventComment.getCommentatorNickname(),
                 eventComment.getCommentAdded());
@@ -137,7 +135,8 @@ public class EventService {
                 .orElseThrow(() -> new EventNotFoundException(eventId));
 
         final User user = userRepository.findUserByEmail(currentlyLoggedUserEmail)
-                .orElseThrow(() ->new NoAuthorizationToPerformTheAction(currentlyLoggedUserEmail));
+                .orElseThrow(() ->new UserDoesntExistException(currentlyLoggedUserEmail));
+
         final EventComment eventComment = new EventComment();
 
         eventComment.setCommentText(newCommentForm.getCommentText());
@@ -145,22 +144,10 @@ public class EventService {
         eventComment.setCommentator(user);
         eventComment.setEvent(event);
 
-        eventCommentRepository.save(eventComment);
-
     }
 
     @Transactional
-    public void signUserForEvent(Long eventId, NewUserRegisteredForEventForm newUserRegisteredForEventForm, String currentlyLoggedUserEmail) {
-
-//        final User user = userRepository.findUserByEmail(currentlyLoggedUserEmail)
-//                .orElseThrow(() -> new NoAuthorizationToPerformTheAction(currentlyLoggedUserEmail));
-
-        final boolean alreadySignedForEvent = usersRegisteredForEventsRepository
-                .existsByRegisteredUserEmail(newUserRegisteredForEventForm.getRegisteredUserEmail());
-
-        if(alreadySignedForEvent) {
-            throw new UserAlreadyRegisteredForEventException(newUserRegisteredForEventForm.getRegisteredUserEmail());
-        }
+    public void signUserForEvent(Long eventId, String currentlyLoggedUserEmail) {
 
         final User user = userRepository.findUserByEmail(currentlyLoggedUserEmail)
                 .orElseThrow(() -> new NoAuthorizationToPerformTheAction(currentlyLoggedUserEmail));
@@ -170,13 +157,35 @@ public class EventService {
 
         final UsersRegisteredForEvents usersRegisteredForEvents = new UsersRegisteredForEvents();
 
-        usersRegisteredForEvents.setRegisteredUserEmail(newUserRegisteredForEventForm.getRegisteredUserEmail());
-        usersRegisteredForEvents.setRegisteredUserNickname(newUserRegisteredForEventForm.getRegisteredUserNickname());
-//        usersRegisteredForEvents.ge
+        usersRegisteredForEvents.setRegisteredUserEmail(user.getEmail());
+        usersRegisteredForEvents.setRegisteredUserNickname(user.getNickname());
         usersRegisteredForEvents.addEvent(event);
         usersRegisteredForEvents.addUser(user);
 
         usersRegisteredForEventsRepository.save(usersRegisteredForEvents);
 
+    }
+
+    @Transactional
+    public void signOffUserForEvent(Long eventId, String currentlyLoggedUserEmail) {
+
+        final User user = userRepository.findUserByEmail(currentlyLoggedUserEmail)
+                .orElseThrow(() -> new NoAuthorizationToPerformTheAction(currentlyLoggedUserEmail));
+
+        final Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventNotFoundException(eventId));
+
+        final UsersRegisteredForEvents usersRegisteredForEvents = new UsersRegisteredForEvents();
+
+        usersRegisteredForEvents.setRegisteredUserEmail(user.getEmail());
+        usersRegisteredForEvents.setRegisteredUserNickname(user.getNickname());
+        usersRegisteredForEvents.addEvent(event);
+        usersRegisteredForEvents.addUser(user);
+
+        usersRegisteredForEventsRepository.delete(usersRegisteredForEvents);
+    }
+
+    public boolean isSignedForEvent(Long eventId, String currentlyLoggedUserEmail) {
+        return usersRegisteredForEventsRepository.existsByIdAndRegisteredUserEmail(eventId, userContextService.getCurrentlyLoggedUserEmail());
     }
 }
